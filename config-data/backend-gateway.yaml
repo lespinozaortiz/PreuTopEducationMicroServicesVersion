@@ -1,0 +1,39 @@
+server:
+  port: 8080
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://backend-eurekaService:8761/eureka
+  instance:
+    hostname: localhost
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: '*'
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
+      routes:
+        - id: backend-estudianteService
+          uri: lb://backend-estudianteService
+          predicates:
+            - Path=/estudiante/**
+        - id: backend-cuotaService
+          uri: lb://backend-cuotaService
+          predicates:
+            - Path=/cuotas/**
+        - id: backend-examenService
+          uri: lb://backend-examenService
+          predicates:
+            - Path=/examen/**
+        
