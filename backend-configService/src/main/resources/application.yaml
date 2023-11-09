@@ -1,0 +1,12 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          default-label: master
+          uri: https://github.com/Letoesp/PreuTopEducationMicroServicesVersion
+          search-paths: config-data
