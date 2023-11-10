@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   application:
-    name: config
+    name: backend-configService
   cloud:
     config:
       server:
