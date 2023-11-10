@@ -7,6 +7,6 @@ spring:
     config:
       server:
         git:
-          default-label: master
+          default-label: main
           uri: https://github.com/Letoesp/PreuTopEducationMicroServicesVersion
           search-paths: config-data
