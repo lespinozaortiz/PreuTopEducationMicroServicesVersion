@@ -3,8 +3,11 @@ package com.example.backendestudianteService.controller;
 import com.example.backendestudianteService.entity.Estudiante;
 import com.example.backendestudianteService.service.EstudianteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -29,14 +32,19 @@ public class EstudianteController {
     }
 
     @PostMapping("/ingreso_estudiante")
-    public void registrarEstudiante(@RequestParam("rutDigits") String rutDigits,
-                                    @RequestParam("rutVerifier") String rutVerifier,
-                                    @RequestBody Estudiante estudiante) {
-        String rutCombined = rutDigits + rutVerifier;
-        long rutLong = Long.parseLong(rutCombined);
-        estudiante.setRut(rutLong);
-        estudianteService.registrarEstudiante(estudiante);
+    public ResponseEntity<String> registrarEstudiante(@RequestBody Estudiante estudiante) {
+        try {
+            // Lógica para registrar el estudiante
+            estudianteService.registrarEstudiante(estudiante);
+
+            return ResponseEntity.ok("Estudiante registrado exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno del servidor: " + e.getMessage());
+        }
     }
+
+
 
     @GetMapping("/editar_estudiante/{id}")
     public Estudiante editarEstudiante(@PathVariable Long id) {
@@ -44,23 +52,52 @@ public class EstudianteController {
     }
 
     @PostMapping("/editar_estudiante/{id}")
-    public void editarEstudiante(@PathVariable Long id, @RequestBody Estudiante estudiante) {
-        Estudiante estudianteIngresado = estudianteService.obtenerEstudianteporRut(id);
-        estudianteIngresado.setRut(id);
-        estudianteIngresado.setNombres(estudiante.getNombres());
-        estudianteIngresado.setRut(estudiante.getRut());
-        estudianteIngresado.setApellidos(estudiante.getApellidos());
-        estudianteIngresado.setFecha_nacimiento(estudiante.getFecha_nacimiento());
-        estudianteIngresado.setTipo_colegio_proc(estudiante.getTipo_colegio_proc());
-        estudianteIngresado.setNombre_colegio(estudiante.getNombre_colegio());
-        estudianteIngresado.setEgreso(estudiante.getEgreso());
-        estudianteService.actualizarEstudiante(estudianteIngresado);
+    public ResponseEntity<String> editarEstudiante(@PathVariable Long id, @RequestBody Estudiante estudiante) {
+        try {
+            // Obtener el estudiante existente por ID
+            Estudiante estudianteIngresado = estudianteService.obtenerEstudianteporRut(id);
+
+            // Verificar si el estudiante existe
+            if (estudianteIngresado != null) {
+                // Actualizar los campos necesarios
+                estudianteIngresado.setRut(id);
+                estudianteIngresado.setNombres(estudiante.getNombres());
+                estudianteIngresado.setApellidos(estudiante.getApellidos());
+                estudianteIngresado.setFecha_nacimiento(estudiante.getFecha_nacimiento());
+                estudianteIngresado.setTipo_colegio_proc(estudiante.getTipo_colegio_proc());
+                estudianteIngresado.setNombre_colegio(estudiante.getNombre_colegio());
+                estudianteIngresado.setEgreso(estudiante.getEgreso());
+
+                // Actualizar el estudiante en el servicio
+                estudianteService.actualizarEstudiante(estudianteIngresado);
+
+                // Devolver una respuesta exitosa
+                return ResponseEntity.ok("Estudiante actualizado exitosamente");
+            } else {
+                // Devolver respuesta indicando que el estudiante no fue encontrado
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Estudiante no encontrado");
+            }
+        } catch (Exception e) {
+            // Devolver respuesta con error interno del servidor
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno del servidor: " + e.getMessage());
+        }
     }
 
+
     @GetMapping("/eliminar_estudiante/{id}")
-    public void eliminarEstudiante(@PathVariable Long id) {
-        estudianteService.eliminarEstudiante(id);
+    public ResponseEntity<String> eliminarEstudiante(@PathVariable Long id) {
+        try {
+            estudianteService.eliminarEstudiante(id);
+            return ResponseEntity.ok("Estudiante eliminado exitosamente");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Estudiante no encontrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno del servidor: " + e.getMessage());
+        }
     }
+
 
     @GetMapping("/generar_cuota")
     public List<Estudiante> getEstudiantesCuota() {
