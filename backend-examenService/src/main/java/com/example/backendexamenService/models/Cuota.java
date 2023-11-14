@@ -1,6 +1,5 @@
-package com.example.backendcuotaService.entity;
+package com.example.backendexamenService.models;
 
-import com.example.backendcuotaService.models.Estudiante;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,4 +26,3 @@ public class Cuota {
 
     private Long rutestudiante;
 }
-

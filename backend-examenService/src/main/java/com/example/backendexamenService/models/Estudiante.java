@@ -1,14 +1,14 @@
-package com.example.backendcuotaService.models;
+package com.example.backendexamenService.models;
 
-import com.example.backendcuotaService.entity.Cuota;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
-import java.util.List;
-
 
 @Entity
 @Table

@@ -46,9 +46,9 @@ public class EstudianteController {
 
 
 
-    @GetMapping("/editar_estudiante/{id}")
-    public Estudiante editarEstudiante(@PathVariable Long id) {
-        return estudianteService.obtenerEstudianteporRut(id);
+    @GetMapping("/estudiante/{rut}")
+    public Estudiante getEstudianteByRut(@PathVariable Long rut) {
+        return estudianteService.obtenerEstudianteporRut(rut);
     }
 
     @PostMapping("/editar_estudiante/{id}")
