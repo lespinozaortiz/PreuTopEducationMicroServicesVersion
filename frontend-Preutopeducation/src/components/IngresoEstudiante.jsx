@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import EstudianteService from '../services/EstudianteService';
 
-const IngresoEstudiante = () => {
+const ingresoestudiante = () => {
     const [estudiante, setEstudiante] = useState({
         nombres: '',
         apellidos: '',
@@ -141,4 +141,4 @@ const IngresoEstudiante = () => {
     );
 };
 
-export default IngresoEstudiante;
+export default ingresoestudiante;
