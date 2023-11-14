@@ -20,5 +20,5 @@ public class Examen {
 
     private LocalDate fecha;
     private int puntaje;
-    private Long Rutestudiante;
+    private Long rutestudiante;
 }
